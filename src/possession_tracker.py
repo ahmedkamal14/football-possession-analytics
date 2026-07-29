@@ -46,7 +46,7 @@ class PossessionTracker:
         if closest_player is not None and min_dist <= self.dist_threshold:
             torso_crop = clusterer.crop_torso(frame, closest_player.bbox)
             team_id, conf, team_color = clusterer.predict_team(torso_crop)
-            team_name = f"Team {team_id + 1}"
+            team_name = clusterer.team_names[team_id] if (hasattr(clusterer, 'team_names') and len(clusterer.team_names) > team_id) else f"Team {team_id + 1}"
             
             return PossessionInfo(
                 player_id=closest_player.id,
