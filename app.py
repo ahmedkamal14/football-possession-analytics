@@ -2,6 +2,7 @@ import cv2
 import os
 import json
 import time
+import base64
 import tempfile
 import numpy as np
 import pandas as pd
@@ -67,6 +68,59 @@ st.markdown("""
         border-radius: 8px;
         padding: 0.6rem;
     }
+    .dev-card {
+        background-color: #1E222A;
+        border: 1px solid #2D3139;
+        border-radius: 12px;
+        padding: 1rem 0.5rem;
+        text-align: center;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .dev-card:hover {
+        transform: translateY(-3px);
+        border-color: #1E88E5;
+    }
+    .dev-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 0.6rem auto;
+        display: block;
+        border: 2px solid #1E88E5;
+    }
+    .dev-name {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #FFFFFF;
+        margin-bottom: 0.4rem;
+    }
+    .dev-link-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        background-color: #262C36;
+        color: #90CAF9 !important;
+        text-decoration: none !important;
+        font-size: 0.85rem;
+        font-weight: 600;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid #3A404D;
+        transition: background-color 0.2s ease;
+    }
+    .dev-link-btn:hover {
+        background-color: #1E88E5;
+        color: #FFFFFF !important;
+        border-color: #1E88E5;
+    }
+    .platform-icon {
+        width: 16px;
+        height: 16px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -129,6 +183,91 @@ def draw_broadcast_scoreboard(
     # 3. Loose Ball Block
     loose_text = f"LOOSE: {pct_none:.1f}%"
     cv2.putText(frame, loose_text, (div2_x + 15, y1 + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.50, (180, 180, 180), 1)
+
+def render_developers_section():
+    """Renders the Project Developers section with avatar and platform image icons."""
+    st.markdown("---")
+    st.subheader("👨‍💻 Project Developers")
+    st.markdown("""
+    <div style="text-align: center; margin-top: -0.5rem; margin-bottom: 1.5rem; color: #B0BEC5; font-size: 1.05rem;">
+        🎓 <strong>Under the supervision of:</strong> 
+        <span style="color: #64B5F6; font-weight: 600;">Eng. Mohamed Samir</span> &bull; 
+        <span style="color: #64B5F6; font-weight: 600;">Eng. Maram Khalid</span> &bull; 
+        <span style="color: #64B5F6; font-weight: 600;">Eng. Ahmed Essam</span>
+    </div>
+    """, unsafe_allow_html=True)
+
+    developers = [
+        {
+            "name": "Ahmed Kamal",
+            "avatar": "https://github.com/ahmedkamal14.png",
+            "link": "https://github.com/ahmedkamal14",
+            "platform": "GitHub",
+            "icon": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='white'><path d='M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z'/></svg>"
+        },
+        {
+            "name": "Georgios Marqus",
+            "avatar": "https://drive.google.com/file/d/1jElRKGnWEOdRSqYA4q_ROj1cGxF3bsvK/view?usp=drive_link",
+            "link": "https://www.linkedin.com/in/georgios-marqus",
+            "platform": "LinkedIn",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzBBNjZDMiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMjAuNDQ3IDIwLjQ1MmgtMy41NTR2LTUuNTY5YzAtMS4zMjgtLjAyNy0zLjAzNy0xLjg1Mi0zLjAzNy0xLjg1MyAwLTIuMTM2IDEuNDQ1LTIuMTM2IDIuOTM5djUuNjY3SDkuMzUxVjloMy40MTR2MS41NjFoLjA0NmMuNDc3LS45IDEuNjM3LTEuODUgMy4zNy0xLjg1IDMuNjAxIDAgNC4yNjcgMi4zNyA0LjI2NyA1LjQ1NXY2LjI4NnpNNS4zMzcgNy40MzNjLTEuMTQ4IDAtMi4wNjMtLjkyNi0yLjA2My0yLjA2NSAwLTEuMTM4LjkyLTIuMDYzIDIuMDYzLTIuMDYzIDEuMTQgMCAyLjA2NC45MjUgMi4wNjQgMi4wNjMgMCAxLjEzOS0uOTI1IDIuMDY1LTIuMDY0IDIuMDY5em0xLjc4MiAxMy4wMTlIMy41NTVWOWgzLjU2NHYxMS40NTJ6TTIyLjIyNSAwSDEuNzcxQy43OTIgMCAwIC43NzQgMCAxLjcyOXYyMC41NDJDMCAyMy4yMjcuNzkyIDI0IDEuNzcxIDI0aDIwLjQ1MUMyMy4yIDI0IDI0IDIzLjIyNyAyNCAyMi4yNzFWMS43MjlDMjQgLjc3NCAyMy4yIDAgMjIuMjIyIDBoLjAwM3oiLz48L3N2Zz4="
+        },
+        {
+            "name": "Omar Hamdy",
+            "avatar": "https://drive.google.com/file/d/1IOK9jo-yy31kSbtsysQJ1eYe2Pnh2MwY/view?usp=drive_link",
+            "link": "https://www.linkedin.com/in/omar-hamdy-883579343?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+            "platform": "LinkedIn",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzBBNjZDMiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMjAuNDQ3IDIwLjQ1MmgtMy41NTR2LTUuNTY5YzAtMS4zMjgtLjAyNy0zLjAzNy0xLjg1Mi0zLjAzNy0xLjg1MyAwLTIuMTM2IDEuNDQ1LTIuMTM2IDIuOTM5djUuNjY3SDkuMzUxVjloMy40MTR2MS41NjFoLjA0NmMuNDc3LS45IDEuNjM3LTEuODUgMy4zNy0xLjg1IDMuNjAxIDAgNC4yNjcgMi4zNyA0LjI2NyA1LjQ1NXY2LjI4NnpNNS4zMzcgNy40MzNjLTEuMTQ4IDAtMi4wNjMtLjkyNi0yLjA2My0yLjA2NSAwLTEuMTM4LjkyLTIuMDYzIDIuMDYzLTIuMDYzIDEuMTQgMCAyLjA2NC45MjUgMi4wNjQgMi4wNjMgMCAxLjEzOS0uOTI1IDIuMDY1LTIuMDY4IDIuMDY1em0xLjc4MiAxMy4wMTlIMy41NTVWOWgzLjU2NHYxMS40NTJ6TTIyLjIyNSAwSDEuNzcxQy43OTIgMCAwIC43NzQgMCAxLjcyOXYyMC41NDJDMCAyMy4yMjcuNzkyIDI0IDEuNzcxIDI0aDIwLjQ1MUMyMy4yIDI0IDI0IDIzLjIyNyAyNCAyMi4yNzFWMS43MjlDMjQgLjc3NCAyMy4yIDAgMjIuMjIyIDBoLjAwM3oiLz48L3N2Zz4="
+        },
+        {
+            "name": "Abdallah Abdelrahim",
+            "avatar": "https://drive.google.com/file/d/1kaulcuEoSXsfoHy3xoINlHE7qqp_rnhE/view?usp=drive_link",
+            "link": "https://www.linkedin.com/in/abdullah-abdulrahem-abdulaty",
+            "platform": "LinkedIn",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzBBNjZDMiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMjAuNDQ3IDIwLjQ1MmgtMy41NTR2LTUuNTY5YzAtMS4zMjgtLjAyNy0zLjAzNy0xLjg1Mi0zLjAzNy0xLjg1MyAwLTIuMTM2IDEuNDQ1LTIuMTM2IDIuOTM5djUuNjY3SDkuMzUxVjloMy40MTR2MS41NjFoLjA0NmMuNDc3LS45IDEuNjM3LTEuODUgMy4zNy0xLjg1IDMuNjAxIDAgNC4yNjcgMi4zNyA0LjI2NyA1LjQ1NXY2LjI4NnpNNS4zMzcgNy40MzNjLTEuMTQ4IDAtMi4wNjMtLjkyNi0yLjA2My0yLjA2NSAwLTEuMTM4LjkyLTIuMDYzIDIuMDYzLTIuMDYzIDEuMTQgMCAyLjA2NC45MjUgMi4wNjQgMi4wNjMgMCAxLjEzOS0uOTI1IDIuMDY1LTIuMDY0IDIuMDY1em0xLjc4MiAxMy4wMTlIMy41NTVWOWgzLjU2NHYxMS40NTJ6TTIyLjIyNSAwSDEuNzcxQy43OTIgMCAwIC43NzQgMCAxLjcyOXYyMC41NDJDMCAyMy4yMjcuNzkyIDI0IDEuNzcxIDI0aDIwLjQ1MUMyMy4yIDI0IDI0IDIzLjIyNyAyNCAyMi4yNzFWMS43MjlDMjQgLjc3NCAyMy4yIDAgMjIuMjIyIDBoLjAwM3oiLz48L3N2Zz4="
+        },
+        {
+            "name": "Mohamed Hamed",
+            "avatar": "https://drive.google.com/file/d/1l_oVe5JGMpwwTKgA7Qs8lP2lTAsRVJ_H/view?usp=drive_link",
+            "link": "https://www.linkedin.com/in/mohamed-hamed-035a07340?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+            "platform": "LinkedIn",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iIzBBNjZDMiIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMjAuNDQ3IDIwLjQ1MmgtMy41NTR2LTUuNTY5YzAtMS4zMjgtLjAyNy0zLjAzNy0xLjg1Mi0zLjAzNy0xLjg1MyAwLTIuMTM2IDEuNDQ1LTIuMTM2IDIuOTM5djUuNjY3SDkuMzUxVjloMy40MTR2MS41NjFoLjA0NmMuNDc3LS45IDEuNjM3LTEuODUgMy4zNy0xLjg1IDMuNjAxIDAgNC4yNjcgMi4zNyA0LjI2NyA1LjQ1NXY2LjI4NnpNNS4zMzcgNy40MzNjLTEuMTQ4IDAtMi4wNjMtLjkyNi0yLjA2My0yLjA2NSAwLTEuMTM4LjkyLTIuMDYzIDIuMDYzLTIuMDYzIDEuMTQgMCAyLjA2NC45MjUgMi4wNjQgMi4wNjMgMCAxLjEzOS0uOTI1IDIuMDY1LTIuMDY4IDIuMDY1em0xLjc4MiAxMy4wMTlIMy41NTVWOWgzLjU2NHYxMS40NTJ6TTIyLjIyNSAwSDEuNzcxQy43OTIgMCAwIC43NzQgMCAxLjcyOXYyMC41NDJDMCAyMy4yMjcuNzkyIDI0IDEuNzcxIDI0aDIwLjQ1MUMyMy4yIDI0IDI0IDIzLjIyNyAyNCAyMi4yNzFWMS43MjlDMjQgLjc3NCAyMy4yIDAgMjIuMjIyIDBoLjAwM3oiLz48L3N2Zz4="
+        }
+    ]
+
+    dev_cols = st.columns(len(developers))
+
+    for col, dev in zip(dev_cols, developers):
+        avatar_url = dev['avatar']
+        fallback_avatar = f"https://ui-avatars.com/api/?name={dev['name'].replace(' ', '+')}&background=0E66C2&color=fff&size=128&bold=true"
+        
+        if os.path.exists(avatar_url):
+            ext = Path(avatar_url).suffix.lower().replace(".", "")
+            mime = "jpeg" if ext in ["jpg", "jpeg"] else ext
+            with open(avatar_url, "rb") as f:
+                data = f.read()
+            if data.startswith(b"\xff\xd8") or data.startswith(b"\x89PNG"):
+                b64 = base64.b64encode(data).decode()
+                avatar_url = f"data:image/{mime};base64,{b64}"
+            else:
+                avatar_url = fallback_avatar
+        elif "drive.google.com" in avatar_url and "/file/d/" in avatar_url:
+            file_id = avatar_url.split("/file/d/")[1].split("/")[0]
+            avatar_url = f"https://drive.google.com/thumbnail?id={file_id}&sz=w400"
+
+        with col:
+            st.markdown(
+                f'''
+                <div class="dev-card">
+                    <img src="{avatar_url}" class="dev-avatar" alt="{dev['name']}" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='{fallback_avatar}';">
+                    <div class="dev-name">{dev['name']}</div>
+                    <a href="{dev['link']}" target="_blank" class="dev-link-btn">
+                        <img src="{dev['icon']}" class="platform-icon" alt="{dev['platform']}"> {dev['platform']}
+                    </a>
+                </div>
+                ''',
+                unsafe_allow_html=True
+            )
 
 # ---------------------------------------------------------
 # Sidebar Controls
@@ -556,21 +695,5 @@ if analyze_button:
                     use_container_width=True
                 )
 
-    # ---------------------------------------------------------
-    # Developers Section
-    # ---------------------------------------------------------
-    st.markdown("---")
-    st.subheader("👨‍💻 Project Developers")
-
-    dev_col1, dev_col2, dev_col3, dev_col4, dev_col5 = st.columns(5)
-
-    with dev_col1:
-        st.markdown("🔗 [**Ahmed Kamal**](https://github.com/ahmedkamal14)")
-    with dev_col2:
-        st.markdown("🔗 [**Georgios Marqus**](https://www.linkedin.com/in/georgios-marqus)")
-    with dev_col3:
-        st.markdown("🔗 [**Omar Hamdy**](https://www.linkedin.com/in/omar-hamdy-883579343?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app)")
-    with dev_col4:
-        st.markdown("🔗 [**Abdallah Abdelrahim**](https://www.linkedin.com/in/abdullah-abdulrahem-abdulaty)")
-    with dev_col5:
-        st.markdown("🔗 [**Mohamed Hamid**](https://www.linkedin.com/in/mohamed-hamed-035a07340?utm_source=share_via&utm_content=profile&utm_medium=member_ios)")
+# Always render Developers Section at the bottom of the main page
+render_developers_section()
