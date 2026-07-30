@@ -54,10 +54,11 @@ Once a video is analyzed, the app renders the annotated video, team possession c
 
 <div align="center">
 
-| Live Broadcast Scoreboard | Analytics Dashboard |
-|:---:|:---:|
-| *`docs/screenshot-video.png`* | *`docs/screenshot-dashboard.png`* |
-| <sub>Add a screenshot or GIF of the annotated video output here</sub> | <sub>Add a screenshot of the Plotly possession dashboard here</sub> |
+
+
+https://github.com/user-attachments/assets/3cfc1446-73f0-4023-bc0c-fd3935f18b46
+
+
 
 </div>
 
