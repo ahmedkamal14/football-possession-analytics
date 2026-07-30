@@ -1,3 +1,4 @@
 /src/__pycache__
 /Test Data
-*.mp4
+./test_XVID.mp4
+./test_mp4v.mp4
